@@ -10,6 +10,7 @@ class Link extends Model {
     use HasFactory;
 
     protected $fillable = [
+        "driver_id" ,
         "url" ,
         "is_visited" ,
         "visited_date" ,

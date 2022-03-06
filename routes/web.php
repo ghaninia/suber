@@ -1,5 +1,10 @@
 <?php
 
+use App\Kernel\Parser\Classes\Creator;
+use App\Kernel\Parser\Drivers\WorldSubtitle\WorldSubtitle;
+use App\Kernel\Parser\Exceptions\NotFoundDriverException;
+use App\Models\Driver;
+use App\Models\Link;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +19,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Link::count() ;
 });

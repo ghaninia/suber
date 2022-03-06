@@ -14,11 +14,8 @@ class Driver extends Model implements DriverModelInterface
     protected $fillable = [
         "name",
         "attacks_count",
-        "current_count_pages",
-        "previous_count_pages",
+        "latest_count_pages" ,
         "current_attack_page",
-
-        "current_page_link" ,
         "previous_page_link" ,
         "next_page_link" ,
     ];

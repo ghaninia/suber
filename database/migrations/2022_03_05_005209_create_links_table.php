@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('links', function (Blueprint $table) {
             $table->id();
+            $table->foreignId("driver_id")->constrained("drivers")->cascadeOnDelete()->cascadeOnUpdate() ;
             $table->text("url") ;
             $table->boolean("is_visited")->default(false) ;
-            $table->timestamp("visited_date");
+            $table->timestamp("visited_date")->nullable() ;
             $table->timestamps();
         });
     }

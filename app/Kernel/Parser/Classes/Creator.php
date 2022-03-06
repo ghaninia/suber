@@ -2,26 +2,41 @@
 
 namespace App\Kernel\Parser\Classes;
 
-use Exception;
 use App\Models\Driver;
 use App\Kernel\Parser\Exceptions\NotFoundDriverException;
 
-class Creator {
+class Creator
+{
+    private function driver(callable $callbak) {
+        Driver::all()->each(function ($driver) use ( $callbak ) {
 
-    protected DriverAbstract $driver ;
+            // dispatch(function () use ($driver , $callbak) {
 
-    public function links(){
-        Driver::all()->each(function($driver){
+                $driverClass = $driver->driver_class;
 
-            $driverClass = $driver->driver_class ;
+                if (!class_exists($driverClass))
+                    throw new NotFoundDriverException();
 
-            if( !class_exists($driverClass) )
-                throw new NotFoundDriverException() ;
+                $driver = new $driverClass($driver);
 
-            $this->driver = new $driverClass ;
-            $this->driver->links() ;
+                return $callbak($driver) ;
+
+            // });
 
         });
     }
 
+    public function link()
+    {
+        $this->driver(function($driver){
+            $driver->links();
+        });
+    }
+
+    public function paginations()
+    {
+        $this->driver(function($driver){
+            $driver->reloadPaginator();
+        });
+    }
 }

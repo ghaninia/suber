@@ -18,15 +18,13 @@ return new class extends Migration
 
             $table->string("name")->nullable();
 
-            $table->bigInteger("attacks_count");
-            $table->bigInteger("current_count_pages");
-            $table->bigInteger("previous_count_pages");
-            $table->bigInteger("current_attack_page");
+            $table->bigInteger("attacks_count")->default(0);
+            $table->bigInteger("latest_count_pages")->default(0);
+            $table->bigInteger("current_attack_page")->nullable();
 
             $table->string("base_url", 255)->unique();
             $table->text("driver_class");
 
-            $table->text("current_page_link")->nullable() ;
             $table->text("previous_page_link")->nullable() ;
             $table->text("next_page_link")->nullable() ;
 
