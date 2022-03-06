@@ -16,12 +16,13 @@ class Driver extends Model implements DriverModelInterface
         "attacks_count",
         "latest_count_pages" ,
         "current_attack_page",
+
         "previous_page_link" ,
         "next_page_link" ,
     ];
 
     protected $guard = [
-        "base_url",
+        "base_uri_host",
         "driver_class",
     ];
 

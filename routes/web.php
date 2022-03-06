@@ -19,5 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return Link::count() ;
+
+    (new Creator)->links();
+
 });

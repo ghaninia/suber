@@ -21,8 +21,8 @@ class DefaultSystemSeeder extends Seeder
             [
                 "name" => "زیرنویس فیلم های سایت worldSubtitle" ,
                 "driver_class" => WorldSubtitle::class ,
-                "base_url" => "https://worldsubtitle.site/category/movies/" ,
-                "next_page_link" => "https://worldsubtitle.site/category/movies/" ,
+                "base_uri_host" => "https://worldsubtitle.site/category/movies/" ,
+                "next_page_link" => "/" ,
                 "created_at"   => Carbon::now() ,
             ]
         ]);

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger("latest_count_pages")->default(0);
             $table->bigInteger("current_attack_page")->nullable();
 
-            $table->string("base_url", 255)->unique();
+            $table->string("base_uri_host", 255)->unique();
             $table->text("driver_class");
 
             $table->text("previous_page_link")->nullable() ;

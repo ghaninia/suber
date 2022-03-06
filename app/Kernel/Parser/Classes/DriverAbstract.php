@@ -52,7 +52,7 @@ abstract class DriverAbstract
         $latestCountPages > $latestCountPagesOnServer ?:
             $this->driver->update([
                 "latest_count_pages" => $latestCountPagesOnServer,
-                "next_page_link" => $this->driver->base_url,
+                "next_page_link" => "/",
             ]);
     }
 
@@ -65,9 +65,12 @@ abstract class DriverAbstract
 
         [$prev, $next] = $this->getNextPaginatorLinks();
 
+        [$uriPrev, $uriPrevPath] = $this->URIGenerator( $prev);
+        [$uriNext, $uriNextPath] = $this->URIGenerator( $next);
+
         $this->driver->update([
-            "previous_page_link" => $prev,
-            "next_page_link" => $next,
+            "previous_page_link" => $uriPrevPath,
+            "next_page_link" => $uriNextPath,
         ]);
     }
 
@@ -80,12 +83,15 @@ abstract class DriverAbstract
     {
         $links = $this->DOMcurrentPageAndGetLinks();
 
-        array_walk($links, function ($url) {
+        array_walk($links, function ($uri) {
+
+            [$uri, $uriQuery] = $this->URIGenerator( $uri);
 
             Link::updateOrCreate([
-                "driver_id" => $this->driver->id ,
-                "url" => $url
+                "driver_id" => $this->driver->id,
+                "url" => $uriQuery
             ]);
+
         });
 
         $this->reloadNextPaginatorLinks();
@@ -97,8 +103,9 @@ abstract class DriverAbstract
      */
     public function url(): string
     {
-        $nextLink = $this->driver->next_page_link;
 
-        return $nextLink ?? die();
+        [$nextUri, $nextUriQuery] = $this->URIGenerator( $this->driver->next_page_link );
+
+        return $nextUri ?? die();
     }
 }

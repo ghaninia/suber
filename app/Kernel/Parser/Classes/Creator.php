@@ -10,7 +10,7 @@ class Creator
     private function driver(callable $callbak) {
         Driver::all()->each(function ($driver) use ( $callbak ) {
 
-            // dispatch(function () use ($driver , $callbak) {
+            dispatch(function () use ($driver , $callbak) {
 
                 $driverClass = $driver->driver_class;
 
@@ -21,12 +21,12 @@ class Creator
 
                 return $callbak($driver) ;
 
-            // });
+            });
 
         });
     }
 
-    public function link()
+    public function links()
     {
         $this->driver(function($driver){
             $driver->links();

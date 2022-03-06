@@ -15,7 +15,10 @@ class WorldSubtitle extends DriverAbstract
      */
     public function getTheLatestPages(): int
     {
-        $response = $this->get($this->driver->base_url);
+
+        [$uri] = $this->URIGenerator() ;
+
+        $response = $this->get($uri);
 
         $href =
             HtmlDomParser::str_get_html(
