@@ -13,8 +13,12 @@ class Link extends Model
     protected $fillable = [
         "driver_id",
         "url",
-        "is_visited",
-        "visited_date",
+
+
+
+
+
+        
     ];
 
     protected $casts = [

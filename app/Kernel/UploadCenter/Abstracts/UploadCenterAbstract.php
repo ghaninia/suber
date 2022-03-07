@@ -4,6 +4,7 @@ namespace App\Kernel\UploadCenter\Abstracts;
 
 use Illuminate\Http\UploadedFile;
 use App\Kernel\UploadCenter\Classes\FileActionCenter;
+use Illuminate\Support\Str;
 
 abstract class UploadCenterAbstract extends FileActionCenter
 {
@@ -74,13 +75,13 @@ abstract class UploadCenterAbstract extends FileActionCenter
 
         is_string($servicePathName) ?
             $basePath[] = $servicePathName :
-            $basePath   = array_merge($basePath, $servicePathName);
+            $basePath   = array_merge(
+                $basePath,
+                $servicePathName
+            );
 
         $path = implode(DIRECTORY_SEPARATOR, $basePath);
-
-        $path = str_replace(" " , "-" , $path) ;
-
-        $path = strtolower($path) ;
+        $path = strtolower($path);
 
         $this->createPathIfNotExists($path);
 
@@ -106,10 +107,12 @@ abstract class UploadCenterAbstract extends FileActionCenter
             $this->originalName :
             $this->file->getClientOriginalName();
 
+        $ext  = pathinfo( $name , PATHINFO_EXTENSION ) ;
+        $name = pathinfo( $name , PATHINFO_FILENAME ) ;
+        $name = Str::slug($name);
+        $name = strtolower($name);
+        $name = sprintf("%s.%s", $name, $ext);
 
-        $name = str_replace(" " , "-" , $name) ;
-        $name = strtolower($name) ;
-
-        return $name ;
+        return $name;
     }
 }
