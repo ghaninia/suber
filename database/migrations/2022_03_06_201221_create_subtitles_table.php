@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('subtitles', function (Blueprint $table) {
             $table->id();
             $table->string("language");
-            $table->string("film_resulation");
+            $table->string("film_resulation")->nullable() ;
             $table->foreignId("post_id")
                 ->constrained("posts")
                 ->cascadeOnUpdate()

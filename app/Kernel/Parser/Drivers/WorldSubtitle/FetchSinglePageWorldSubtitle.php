@@ -3,7 +3,9 @@
 namespace App\Kernel\Parser\Drivers\WorldSubtitle;
 
 use App\Models\Post;
+use App\Kernel\UploadCenter\SubtitleFile;
 use App\Kernel\Parser\Classes\FetchSinglePageAbstract;
+use App\Kernel\Services\Subtitle\SubtitleService;
 
 class FetchSinglePageWorldSubtitle extends FetchSinglePageAbstract
 {
@@ -34,10 +36,14 @@ class FetchSinglePageWorldSubtitle extends FetchSinglePageAbstract
      */
     public function subtitles(Post $post): void
     {
+
         $subtitles =
             $this->fetch()
-            ->find(".single-box-body .new-link-movie");
+            ->find(".single-box-body ul li");
 
+        foreach ($subtitles as $subtitle) {
+            $subtitleLink = $subtitle->findOne(".new-link-3 a")->getAttribute("href");
+            (new SubtitleService)->create($post, $subtitleLink);
+        }
     }
-
 }
