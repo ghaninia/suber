@@ -2,9 +2,10 @@
 
 namespace App\Kernel\Services\Subtitle;
 
-use App\Kernel\Enums\EnumSubtitle;
 use App\Models\Post;
 use App\Models\Subtitle;
+use Illuminate\Support\Str ;
+use App\Kernel\Enums\EnumSubtitle;
 use App\Kernel\UploadCenter\SubtitleFile;
 
 class SubtitleService
@@ -23,7 +24,7 @@ class SubtitleService
         if (!filter_var($file, FILTER_VALIDATE_URL)) return $subtitle;
 
         $ext = pathinfo($file, PATHINFO_EXTENSION);
-        $name = sprintf("%s.%s", $post->name, $ext);
+        $name = sprintf("%s-%s.%s" , Str::random(5) , $post->name, $ext);
 
         (new SubtitleFile($post->production_year, $post->name))
             ->setFile(
