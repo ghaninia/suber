@@ -2,7 +2,7 @@
 
 # Suber
 
-####Crawler download subtitles on Other sites
+## Crawler download subtitles on Other sites
 
 This system is an intelligent crawler! Allows you to navigate the subtitle sites. For example, we started with "worldsubtitle" site
 We use imdb for index name and image and year of production and also an interesting folder system has been implemented which provides you with the ability to easily search and find subtitles.
