@@ -2,11 +2,12 @@
 
 namespace App\Kernel\Parser\Classes;
 
-use App\Events\WhenLinkIsAdded;
 use App\Models\Link;
+use App\Events\WhenLinkIsAdded;
+use Illuminate\Support\Facades\Event;
 use App\Kernel\Parser\Traits\RequestTrait;
 use App\Kernel\Parser\Interfaces\DriverModelInterface;
-use Illuminate\Support\Facades\Event;
+use App\Kernel\Parser\Drivers\WorldSubtitle\FetchSinglePageWorldSubtitle;
 
 abstract class DriverAbstract
 {
@@ -37,7 +38,7 @@ abstract class DriverAbstract
      * Fetch information from the site and store it
      * @param Link $link
      */
-    abstract public function fetch(Link $link) : FetchAbstract ;
+    abstract public function fetch(Link $link) : FetchSinglePageAbstract ;
 
 
     /**

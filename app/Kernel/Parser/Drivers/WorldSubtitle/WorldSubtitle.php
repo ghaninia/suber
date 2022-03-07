@@ -3,9 +3,8 @@
 namespace App\Kernel\Parser\Drivers\WorldSubtitle;
 
 use App\Models\Link;
-use voku\helper\HtmlDomParser;
-use App\Kernel\Parser\Classes\FetchAbstract;
 use App\Kernel\Parser\Classes\DriverAbstract;
+use App\Kernel\Parser\Classes\FetchSinglePageAbstract;
 use App\Kernel\Parser\Exceptions\ElementValueNotFoundException;
 
 class WorldSubtitle extends DriverAbstract
@@ -18,14 +17,10 @@ class WorldSubtitle extends DriverAbstract
     public function getTheLatestPages(): int
     {
 
-        [$uri] = $this->URIGenerator($this->driver->start_page_link) ;
-
-        $response = $this->get($uri);
+        [$uri] = $this->URIGenerator($this->driver->start_page_link);
 
         $href =
-            HtmlDomParser::str_get_html(
-                $response->body()
-            )
+            $this->get($uri)
             ->findOne(".wp-pagenavi a.last")
             ->getAttribute("href");
 
@@ -46,14 +41,12 @@ class WorldSubtitle extends DriverAbstract
 
         $response = $this->get($url = $this->url());
 
-        $instance = HtmlDomParser::str_get_html($response->body());
-
-        $nextPageURI = $instance->findOne(".wp-pagenavi .current+a.page")->getAttribute("href") ;
+        $nextPageURI = $response->findOne(".wp-pagenavi .current+a.page")->getAttribute("href");
 
         return [
-            $url ,
-            empty($nextPageURI) ? null : $nextPageURI ,
-        ] ;
+            $url,
+            empty($nextPageURI) ? null : $nextPageURI,
+        ];
     }
 
 
@@ -64,21 +57,17 @@ class WorldSubtitle extends DriverAbstract
     public function DOMcurrentPageAndGetLinks(): array
     {
 
-        $response = $this->get($this->url());
-
         $elements =
-            HtmlDomParser::str_get_html(
-                $response->body()
-            )
-            ->find(".mybody .cat-post .cat-post-bt a") ;
+            $this->get($this->url())
+            ->find(".mybody .cat-post .cat-post-bt a");
 
-        $links = [] ;
+        $links = [];
 
-        foreach($elements as $element) {
-            $links[] = $element->getAttribute("href") ;
+        foreach ($elements as $element) {
+            $links[] = $element->getAttribute("href");
         }
 
-        return $links ;
+        return $links;
     }
 
 
@@ -88,9 +77,8 @@ class WorldSubtitle extends DriverAbstract
      *
      * @return FetchAbstract
      */
-    public function fetch(Link $link) : FetchAbstract
+    public function fetch(Link $link): FetchSinglePageAbstract
     {
-        return (new FetchWorldSubtitle($link)) ;
+        return new FetchSinglePageWorldSubtitle($link);
     }
-
 }

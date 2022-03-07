@@ -6,6 +6,7 @@ use App\Models\Driver;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use App\Kernel\Parser\Exceptions\NotHttpOkException;
+use voku\helper\HtmlDomParser;
 
 trait RequestTrait
 {
@@ -72,13 +73,13 @@ trait RequestTrait
      *
      * @return Response
      */
-    public function get(string $completelyUri , array $uriQuery = []): Response
+    public function get(string $completelyUri , array $uriQuery = [] , $raw = false ): Response|HtmlDomParser
     {
         $response = $this->existsInstance($completelyUri) ?? Http::get($completelyUri,$uriQuery);
 
         if (!$response->ok())
             throw new NotHttpOkException();
 
-        return $response;
+        return $raw ? $response : HtmlDomParser::str_get_html($response->body());
     }
 }

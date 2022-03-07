@@ -11,7 +11,7 @@ use Illuminate\Http\Client\Response;
 use App\Kernel\UploadCenter\PostFile;
 use App\Kernel\Parser\Traits\RequestTrait;
 
-abstract class FetchAbstract
+abstract class FetchSinglePageAbstract
 {
     use RequestTrait;
 
@@ -26,10 +26,12 @@ abstract class FetchAbstract
      * fetch page link
      * @return Response
      */
-    public function fetch(): Response
+    public function fetch($raw = false): Response|HtmlDomParser
     {
         [$uri] = $this->URIGenerator($this->link->url);
-        return $this->get($uri);
+        $response = $this->get($uri , [] , $raw) ;
+
+        return $response ;
     }
 
     /**
