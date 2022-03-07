@@ -14,11 +14,12 @@ class Driver extends Model implements DriverModelInterface
     protected $fillable = [
         "name",
         "attacks_count",
-        "latest_count_pages" ,
+        "latest_count_pages",
         "current_attack_page",
 
-        "previous_page_link" ,
-        "next_page_link" ,
+        "start_page_link",
+        "previous_page_link",
+        "next_page_link",
     ];
 
     protected $guard = [
@@ -26,8 +27,8 @@ class Driver extends Model implements DriverModelInterface
         "driver_class",
     ];
 
-    public function links() : HasMany {
-        return $this->hasMany(Link::class) ;
+    public function links(): HasMany
+    {
+        return $this->hasMany(Link::class);
     }
-
 }

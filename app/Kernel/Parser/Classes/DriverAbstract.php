@@ -2,18 +2,18 @@
 
 namespace App\Kernel\Parser\Classes;
 
+use App\Events\WhenLinkIsAdded;
+use App\Models\Link;
 use App\Kernel\Parser\Traits\RequestTrait;
 use App\Kernel\Parser\Interfaces\DriverModelInterface;
-use App\Models\Link;
+use Illuminate\Support\Facades\Event;
 
 abstract class DriverAbstract
 {
 
     use RequestTrait;
 
-    public function __construct(protected DriverModelInterface $driver)
-    {
-    }
+    public function __construct(protected DriverModelInterface $driver){}
 
     /**
      * Get the last page in the URL
@@ -34,6 +34,13 @@ abstract class DriverAbstract
     abstract public function DOMcurrentPageAndGetLinks(): array;
 
     /**
+     * Fetch information from the site and store it
+     * @param Link $link
+     */
+    abstract public function fetch(Link $link) : FetchAbstract ;
+
+
+    /**
      * Update the number of pagination links
      * If the number of pages is increased, the cursor is pulled back
      * @return void
@@ -52,7 +59,7 @@ abstract class DriverAbstract
         $latestCountPages > $latestCountPagesOnServer ?:
             $this->driver->update([
                 "latest_count_pages" => $latestCountPagesOnServer,
-                "next_page_link" => "/",
+                "next_page_link" => $this->driver->start_page_link
             ]);
     }
 
@@ -65,8 +72,8 @@ abstract class DriverAbstract
 
         [$prev, $next] = $this->getNextPaginatorLinks();
 
-        [$uriPrev, $uriPrevPath] = $this->URIGenerator( $prev);
-        [$uriNext, $uriNextPath] = $this->URIGenerator( $next);
+        [$uriPrev, $uriPrevPath] = $this->URIGenerator($prev);
+        [$uriNext, $uriNextPath] = $this->URIGenerator($next);
 
         $this->driver->update([
             "previous_page_link" => $uriPrevPath,
@@ -85,12 +92,14 @@ abstract class DriverAbstract
 
         array_walk($links, function ($uri) {
 
-            [$uri, $uriQuery] = $this->URIGenerator( $uri);
+            [$uri, $uriQuery] = $this->URIGenerator($uri);
 
-            Link::updateOrCreate([
+            $link = Link::updateOrCreate([
                 "driver_id" => $this->driver->id,
                 "url" => $uriQuery
             ]);
+
+            Event::dispatch( new WhenLinkIsAdded($link) );
 
         });
 
@@ -104,7 +113,7 @@ abstract class DriverAbstract
     public function url(): string
     {
 
-        [$nextUri, $nextUriQuery] = $this->URIGenerator( $this->driver->next_page_link );
+        [$nextUri, $nextUriQuery] = $this->URIGenerator($this->driver->next_page_link);
 
         return $nextUri ?? die();
     }

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string("base_uri_host", 255)->unique();
             $table->text("driver_class");
 
+            $table->text("start_page_link") ;
             $table->text("previous_page_link")->nullable() ;
             $table->text("next_page_link")->nullable() ;
 

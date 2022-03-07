@@ -2,7 +2,9 @@
 
 namespace App\Kernel\Parser\Drivers\WorldSubtitle;
 
+use App\Models\Link;
 use voku\helper\HtmlDomParser;
+use App\Kernel\Parser\Classes\FetchAbstract;
 use App\Kernel\Parser\Classes\DriverAbstract;
 use App\Kernel\Parser\Exceptions\ElementValueNotFoundException;
 
@@ -16,7 +18,7 @@ class WorldSubtitle extends DriverAbstract
     public function getTheLatestPages(): int
     {
 
-        [$uri] = $this->URIGenerator() ;
+        [$uri] = $this->URIGenerator($this->driver->start_page_link) ;
 
         $response = $this->get($uri);
 
@@ -78,4 +80,17 @@ class WorldSubtitle extends DriverAbstract
 
         return $links ;
     }
+
+
+    /**
+     * fetch all information on link
+     * @param Link $link
+     *
+     * @return FetchAbstract
+     */
+    public function fetch(Link $link) : FetchAbstract
+    {
+        return (new FetchWorldSubtitle($link)) ;
+    }
+
 }

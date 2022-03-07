@@ -7,6 +7,11 @@ use App\Kernel\Parser\Exceptions\NotFoundDriverException;
 
 class Creator
 {
+
+    /**
+     * @param callable $callbak
+     * @return void
+     */
     private function driver(callable $callbak) {
         Driver::all()->each(function ($driver) use ( $callbak ) {
 
@@ -26,6 +31,10 @@ class Creator
         });
     }
 
+
+    /**
+     * @return void
+     */
     public function links()
     {
         $this->driver(function($driver){
@@ -33,10 +42,14 @@ class Creator
         });
     }
 
+    /**
+     * @return void
+     */
     public function paginations()
     {
         $this->driver(function($driver){
             $driver->reloadPaginator();
         });
     }
+
 }
