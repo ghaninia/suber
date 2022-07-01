@@ -16,6 +16,7 @@ Open the command line and :
 
 
 ```php
+$ composer install
 $ cp .env.sample .env 
 $ php artisan key:generate 
 $ touch databases/database.sqlite
